@@ -32,3 +32,6 @@ export function createStore(reducer) {
         }
     }
 }
+
+// root, component là cái gì
+// 3 hàm cuối đọc khá khó hiểu viết bình thường thì ntn
