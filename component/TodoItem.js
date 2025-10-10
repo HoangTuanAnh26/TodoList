@@ -1,21 +1,29 @@
 import html from '../core.js'
+import { connect } from '../store.js'
 
-function TodoItem({ todo, index }) {
+function TodoItem({ todo, index, editIndex }) {
   return html`
-    <li class="">
-      <div class="${todo.completed && 'completed'}">
+    <li class="${todo.completed && 'completed'} ${editIndex === index && 'editing'}">
+      <div class="view">
         <input 
           class="toggle"
           type="checkbox"
           ${todo.completed && 'checked'}
           onchange="dispatch('toggle', ${index})"
         >
-        <label>${todo.title}</label>
-        <button class="destroy"></button>
+        <label ondblclick="dispatch('startEdit', ${index})">${todo.title}</label>
+        <button class="destroy" onclick = "dispatch('destroy', ${index})"></button>
       </div>
-      <input class="edit" value="${todo.title}">
+      <input 
+        class="edit" 
+        value="${todo.title}"
+        onkeyup="event.keyCode === 13 && dispatch('endEdit', this.value.trim()) || event.keyCode === 27 && dispatch('cancelEdit')"
+        onblur="dispatch('endEdit', this.value.trim())"
+      >
     </li>
   `
 }
 
-export default TodoItem
+export default connect()(TodoItem)
+
+// onblur + event.keyCode === 27 chưa chạy chạy chừa đúng lắm phải xuất hiện dấu nháy trong ô nhập mới hoạt động
